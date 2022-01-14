@@ -97,12 +97,20 @@ const App = () => {
             </div>
           </div>
           <div className="footer">
-            <span className="footer-text-span">
+            <div className="footer-cs">
               from{" "}
               <a href="https://constraint.systems" target="_blank">
                 Constraint Systems
               </a>
-            </span>
+            </div>
+            <div className="footer-source">
+              <a
+                href="https://github.com/constraint-systems/cascade/blob/main/pages/index.tsx"
+                target="_blank"
+              >
+                View source
+              </a>
+            </div>
           </div>
         </div>
       ) : (
