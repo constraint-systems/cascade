@@ -55,7 +55,7 @@ const App = () => {
               .reverse()
               .map((post: PostProps) => (
                 <style key={post.id} type="text/css">
-                  {post.content}
+                  {post.content.replace(/\!important/g, "")}
                 </style>
               ))
           : null}
@@ -76,7 +76,8 @@ const App = () => {
             </h1>
             <div className="cascade-description">
               An experiment in collaborative CSS. Style is determined by the
-              most recent 32 posts.
+              most recent 32 posts. <code>!important</code> is no longer
+              allowed.
             </div>
           </div>
           <div className="compose-and-posts-wrapper">
@@ -85,7 +86,9 @@ const App = () => {
               {posts.map((post: PostProps) => (
                 <div key={post.id} className={`post post-${post.id}`}>
                   <div className="post-content">
-                    <span className="post-content-span">{post.content}</span>
+                    <span className="post-content-span">
+                      {post.content.replace(/\!important/g, "")}
+                    </span>
                   </div>
                   <div className="post-timestamp">
                     <span className="post-timestamp-span">
@@ -168,7 +171,7 @@ const Compose = ({ refreshPosts }) => {
 
   const handleChange = (e) => {
     setContent(e.target.value);
-    styleRef.current.innerText = e.target.value;
+    styleRef.current.innerText = e.target.value.replace(/\!important/g, "");
   };
 
   return (
