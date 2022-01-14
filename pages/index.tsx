@@ -133,7 +133,24 @@ const App: React.FC<Props> = (props) => {
             </span>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div
+          className="loading-container"
+          style={{
+            position: "fixed",
+            left: 0,
+            top: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+          }}
+        >
+          <div className="loading-text">loading...</div>
+        </div>
+      )}
     </>
   );
 };
