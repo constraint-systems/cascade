@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import Layout from "../components/Layout";
 import Head from "next/head";
-import Compose from "../components/Compose";
-import TimeAgo from "react-timeago";
+import { timeSince } from "../utils";
 
 export type PostProps = {
   id: number;
@@ -10,33 +8,7 @@ export type PostProps = {
   createdAt: number;
 };
 
-type Props = {
-  feed: PostProps[];
-};
-
-function timeSince(createdAt) {
-  const date = new Date(createdAt).getTime() / 1000;
-  var seconds = Math.floor(new Date().getTime() / 1000 - date),
-    interval = Math.floor(seconds / 31536000);
-
-  if (interval > 1) return interval + "y";
-
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) return interval + "m";
-
-  interval = Math.floor(seconds / 86400);
-  if (interval >= 1) return interval + "d";
-
-  interval = Math.floor(seconds / 3600);
-  if (interval >= 1) return interval + "h";
-
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) return interval + "m ";
-
-  return Math.floor(seconds) + "s";
-}
-
-const App: React.FC<Props> = (props) => {
+const App = () => {
   const [posts, setPosts] = React.useState(null);
 
   const refreshPosts = useCallback(async () => {
@@ -151,6 +123,66 @@ const App: React.FC<Props> = (props) => {
         </div>
       )}
     </>
+  );
+};
+
+const Compose = ({ refreshPosts }) => {
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+  const styleRef = useRef(null);
+
+  useEffect(() => {
+    styleRef.current = document.querySelector("#styleRef");
+  }, [styleRef]);
+
+  const sendPost = async () => {
+    if (!loading) {
+      if (content.trim().length > 0) {
+        setLoading(true);
+        await fetch("api/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            content: content,
+          }),
+        });
+        refreshPosts();
+        setTimeout(() => {
+          setContent("");
+          styleRef.current.innerText = "";
+          setLoading(false);
+        }, 300);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    setContent(e.target.value);
+    styleRef.current.innerText = e.target.value;
+  };
+
+  return (
+    <div className="compose-box">
+      <div className="compose-text-container">
+        <textarea
+          className="compose-textarea"
+          onChange={handleChange}
+          value={content}
+          spellCheck="false"
+        ></textarea>
+      </div>
+      <div className="compose-button-container">
+        <button
+          className="compose-button"
+          disabled={loading}
+          onClick={sendPost}
+        >
+          Post
+        </button>
+      </div>
+    </div>
   );
 };
 
