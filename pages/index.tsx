@@ -145,7 +145,6 @@ const App: React.FC<Props> = (props) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height: "100vh",
           }}
         >
           <div className="loading-text">loading...</div>
