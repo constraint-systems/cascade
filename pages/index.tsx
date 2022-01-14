@@ -72,7 +72,7 @@ const App: React.FC<Props> = (props) => {
         />
         <meta
           property="og:image"
-          content="https://api.apiflash.com/v1/urltoimage?access_key=8869f084c4454b098ba777233e7f16b0&format=jpeg&height=800&ttl=43200&url=https%3A%2F%2Fcascade.constraint.systems&width=1200"
+          content="https://api.apiflash.com/v1/urltoimage?access_key=8869f084c4454b098ba777233e7f16b0&format=jpeg&height=800&ttl=43200&url=https%3A%2F%2Fcascade.constraint.systems&width=1200&wait_for=.page-wrapper"
         />
         <meta property="og:url" content="https://cascade.constraint.systems" />
         <meta name="twitter:card" content="summary_large_image" />
