@@ -1,3 +1,9 @@
-# Fullstack Authentication Example with Next.js and NextAuth.js
+# Cascade
 
-This is the starter project for the fullstack tutorial with Next.js and Prisma. You can find the final version of this project in the [`final`](https://github.com/prisma/blogr-nextjs-prisma/tree/final) branch of this repo.
+ <img
+ src='https://raw.githubusercontent.com/constraint-systems/cascade/master/public/cascade.gif'
+ width="600"/>
+
+An experiment in collaborative CSS. Style is determined by the most recent 32 posts.
+
+https://cascade.constraint.systems
