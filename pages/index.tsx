@@ -9,8 +9,24 @@ export type PostProps = {
   createdAt: number;
 };
 
-const App = () => {
-  const [posts, setPosts] = React.useState(null);
+const prefix =
+  process.env.NODE_ENV === "production"
+    ? "https://cascade.constraint.systems"
+    : "http://localhost:3000";
+
+export async function getServerSideProps(context: any) {
+  const posts = await fetch(prefix + "/api/posts/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const postsJSON = await posts.json();
+  return { props: { initialPosts: postsJSON } };
+}
+
+const App = ({ initialPosts }) => {
+  const [posts, setPosts] = React.useState(initialPosts);
 
   const refreshPosts = useCallback(async () => {
     const posts = await fetch("api/posts", {
