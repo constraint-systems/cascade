@@ -15,7 +15,7 @@ const prefix =
     : "http://localhost:3000";
 
 export async function getServerSideProps(context: any) {
-  const posts = await fetch(prefix + "/api/posts/", {
+  const posts = await fetch(prefix + "/api/posts", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -26,10 +26,10 @@ export async function getServerSideProps(context: any) {
 }
 
 const App = ({ initialPosts }) => {
-  const [posts, setPosts] = React.useState(initialPosts);
+  const [posts, setPosts] = React.useState(null);
 
   const refreshPosts = useCallback(async () => {
-    const posts = await fetch("api/posts", {
+    const posts = await fetch("/api/posts", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

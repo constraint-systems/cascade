@@ -75,14 +75,14 @@ const App = ({ postCount }) => {
     e.preventDefault();
     setIsPlaying(false);
     // @ts-ignore
-    const clamped = clamp(e.target.elements.pageInput.value, 0, postCount - 1);
+    const clamped = clamp(e.target.elements.pageInput.value, 0, postCount);
     setPageInput(clamped.toString());
     router.push("/history/" + clamped);
   };
 
   const pushClamped = (value: number) => {
     setIsPlaying(false);
-    const clamped = clamp(value, 0, postCount - 1);
+    const clamped = clamp(value, 0, postCount);
     router.push("/history/" + clamped);
   };
 
@@ -204,7 +204,7 @@ const App = ({ postCount }) => {
               }}
             />
           </form>
-          <div>of {postCount - 1}</div>
+          <div>of {postCount}</div>
           <button
             onClick={() => {
               pushClamped(postNum + 1);
@@ -217,10 +217,10 @@ const App = ({ postCount }) => {
           >{`25 >`}</button>
           <button
             onClick={() => {
-              pushClamped(postCount - 1);
+              pushClamped(postCount);
             }}
           >
-            {postCount - 1}
+            {postCount}
           </button>
         </div>
       </div>

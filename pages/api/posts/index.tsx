@@ -10,5 +10,6 @@ export default async function handle(req, res) {
   for (const post of posts) {
     post.createdAt = JSON.parse(JSON.stringify(post.createdAt));
   }
+  console.log(posts);
   res.json(posts);
 }
