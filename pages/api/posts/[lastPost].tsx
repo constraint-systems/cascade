@@ -10,8 +10,10 @@ export default async function handle(req: any, res: any) {
     skip: Math.max(0, lastPost - 32),
     take: Math.min(32, parseInt(lastPost)),
   });
+
   for (const post of posts) {
     post.createdAt = JSON.parse(JSON.stringify(post.createdAt));
   }
+
   res.json(posts);
 }
