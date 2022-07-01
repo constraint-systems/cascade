@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import Head from "next/head";
-import { timeSince } from "../utils";
 import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
 
 const prefix =
   process.env.NODE_ENV === "production"
@@ -28,6 +28,7 @@ const App = ({ postCount }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const playingRef = useRef(null);
   const postNumRef = useRef(postNum);
+  const [pageInput, setPageInput] = useState(lastPost);
   postNumRef.current = postNum;
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const App = ({ postCount }) => {
         frameRef.current.contentWindow.postMessage(lastPost, window.origin);
       }, 0);
     }
+    setPageInput(lastPost);
   }, [lastPost]);
 
   useEffect(() => {
@@ -47,6 +49,12 @@ const App = ({ postCount }) => {
       clearInterval(playingRef.current);
     }
   }, [isPlaying, playingRef]);
+
+  const handleForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    // @ts-ignore
+    router.push("/history/" + e.target.elements.pageInput.value);
+  };
 
   return (
     <div>
@@ -64,8 +72,13 @@ const App = ({ postCount }) => {
           paddingRight: 8,
         }}
       >
-        <div>History</div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div>
+          <Link href="/">
+            <a>Cascade</a>
+          </Link>{" "}
+          History
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           {isPlaying ? (
             <button
               onClick={() => {
@@ -85,6 +98,11 @@ const App = ({ postCount }) => {
           )}
           <button
             onClick={() => {
+              router.push("/history/0");
+            }}
+          >{`start`}</button>
+          <button
+            onClick={() => {
               router.push("/history/" + (postNum - 25));
             }}
           >{`< 25`}</button>
@@ -93,10 +111,18 @@ const App = ({ postCount }) => {
               router.push("/history/" + (postNum - 1));
             }}
           >{`<`}</button>
-          <form>
-            <input type="number" value={lastPost} />
+          <form onSubmit={handleForm}>
+            <input
+              name="pageInput"
+              type="number"
+              style={{ width: "6ch" }}
+              value={pageInput}
+              onChange={(e) => {
+                setPageInput(e.target.value);
+              }}
+            />
           </form>
-          <div>of {postCount}</div>
+          <div>of {postCount - 1}</div>
           <button
             onClick={() => {
               router.push("/history/" + (postNum + 1));
@@ -107,6 +133,11 @@ const App = ({ postCount }) => {
               router.push("/history/" + (postNum + 25));
             }}
           >{`25 >`}</button>
+          <button
+            onClick={() => {
+              router.push("/history/" + (postCount - 1));
+            }}
+          >{`end`}</button>
         </div>
       </div>
       <iframe

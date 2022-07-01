@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import Head from "next/head";
 import { timeSince } from "../utils";
+import Link from "next/link";
 
 export type PostProps = {
   id: number;
@@ -65,6 +66,11 @@ const App = () => {
         <div className="page-wrapper">
           <style type="text/css" id="styleRef"></style>
           <div className="cascade-info">
+            <div className="history-link">
+              <Link href="history/0">
+                <a>history</a>
+              </Link>
+            </div>
             <h1 className="cascade-title">
               <span className="title-letter-0">C</span>
               <span className="title-letter-1">a</span>
