@@ -27,18 +27,59 @@ export async function getServerSideProps(context: any) {
   return { props: { posts: postsJSON } };
 }
 
-const App = ({ posts }) => {
+async function getPosts(lastPost: number) {
+  const posts = await fetch(prefix + "/api/posts/" + lastPost, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const postsJSON = await posts.json();
+  postsJSON.reverse();
+  return postsJSON;
+}
+
+const App = () => {
   const router = useRouter();
+  const { lastPost } = router.query;
+  const [internalLastPost, setInternalLastPost] = useState(
+    parseInt(lastPost as string)
+  );
+  const [posts, setPosts] = useState(null);
+
+  const refreshPosts = useCallback(
+    async (lastPost) => {
+      const posts = await fetch(prefix + "/api/posts/" + lastPost, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const postsJSON = await posts.json();
+      postsJSON.reverse();
+      setPosts(postsJSON);
+    },
+    [setPosts]
+  );
+
+  useEffect(() => {
+    // initial load
+    if (lastPost) {
+      refreshPosts(lastPost);
+    }
+  }, [lastPost]);
 
   useEffect(() => {
     const handleMessage = (e) => {
-      router.push("/raw/" + e.data);
+      refreshPosts(parseInt(e.data as string));
     };
     window.addEventListener("message", handleMessage);
     return () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
+
+  console.log(posts);
 
   return (
     <>

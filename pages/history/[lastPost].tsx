@@ -44,10 +44,13 @@ const App = ({ postCount }) => {
     if (isPlaying) {
       playingRef.current = setInterval(() => {
         router.push("/history/" + (postNumRef.current + 1));
-      }, 600);
+      }, 800);
     } else {
       clearInterval(playingRef.current);
     }
+    return () => {
+      clearInterval(playingRef.current);
+    };
   }, [isPlaying, playingRef]);
 
   const handleForm = (e: React.FormEvent) => {
