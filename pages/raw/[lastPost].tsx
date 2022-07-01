@@ -46,10 +46,21 @@ const App = () => {
     parseInt(lastPost as string)
   );
   const [posts, setPosts] = useState(null);
+  const abortControllerRef = React.useRef<AbortController | undefined>(
+    undefined
+  );
 
   const refreshPosts = useCallback(
     async (lastPost) => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      // Assign a new AbortController for the latest fetch to our useRef variable
+      abortControllerRef.current = new AbortController();
+      const { signal } = abortControllerRef.current;
+
       const posts = await fetch(prefix + "/api/posts/" + lastPost, {
+        signal,
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +70,7 @@ const App = () => {
       postsJSON.reverse();
       setPosts(postsJSON);
     },
-    [setPosts]
+    [setPosts, abortControllerRef]
   );
 
   useEffect(() => {
@@ -78,8 +89,6 @@ const App = () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
-
-  console.log(posts);
 
   return (
     <>
